@@ -1,0 +1,77 @@
+ //private boolean loading = true;
+    int pastVisiblesItems, visibleItemCount, totalItemCount;
+boolean isLoading; 
+
+
+rv_listing.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                if (dy > 0) //check for scroll down
+                {
+                    visibleItemCount = linearLayoutManager.getChildCount();
+                    totalItemCount = linearLayoutManager.getItemCount();
+                    pastVisiblesItems = linearLayoutManager.findFirstVisibleItemPosition();
+
+                    if (!isLoading && Integer.parseInt(API_TImestamp) != 0) {
+                        if ((visibleItemCount + pastVisiblesItems) >= totalItemCount) {
+                            isLoading = true;
+                                // call api             
+                            getPostListDataApi(mActivity, "post_list", instituteID, "1", false, API_TImestamp);
+                            Log.v("...", "Last Item Wow !");
+                            //Do pagination.. i.e. fetch new data
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+
+make loading Visible in stating of api
+    isLoading = true;
+                rl_progressbar.setVisibility(View.VISIBLE);
+                progressBar1.setVisibility(View.VISIBLE);
+
+- in all api call status =0 or 1 just make 
+
+ isLoading = false;
+                        rl_progressbar.setVisibility(View.GONE);
+                        progressBar1.setVisibility(View.GONE);
+
+
+
+in XMl
+
+
+    <com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout
+        android:id="@+id/swipyrefreshlayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/rl_progressbar"
+        android:layout_alignParentTop="true"
+        app:srl_direction="top">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_listing"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/rl_progressbar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_alignParentBottom="true"
+        android:background="@color/white">
+
+        <ProgressBar
+            android:id="@+id/progressBar1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+
+            android:background="@color/white"
+             />
+    </RelativeLayout>

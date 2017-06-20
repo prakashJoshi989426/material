@@ -1,0 +1,11 @@
+Get the time string from long timestamp
+
+ long initial_time = Integer.parseInt(arrData_adapter.get(position).get(
+                        Constant_notification_list.added));
+
+                long time_new = System.currentTimeMillis() / 1000;
+               
+                
+                
+                String result = " " + DateUtils.getRelativeTimeSpanString(initial_time, time_new, 0);
+

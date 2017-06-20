@@ -1,0 +1,50 @@
+
+Following instruction for app add on facebook devloper console:
+
+1) Open https://developers.facebook.com/
+2) click on "Apps" tab -> Create new Aplication -> Enter Appication Name and choose your application category.
+3) Dashboard Page : App ID exits like App ID : 911831638841047 (Copy and add in string.xml like <string name="app_id">911831638841047</string> 4) Settings menu : Add click on "Add Paltform" -> select android. 
+					       -> Enter your package name on : Google Play Package Name.
+					       -> Enter your Calss name on   : Class Name.
+					       -> Key Hashes : Both is different (debug key and signature key) (Its mandatory for all app).
+					       ->Add your email id in : Contact Email.
+					       -> Click on "Save Changes" Button.
+
+5) Status & Review : Do you want to make this app and all its live features available to the general public? : Yes for publish your app.  
+
+6) just change the app_id - from library modulein String.xml file 
+
+7) just call FaceBookActivity using Intent
+                   ==> Intent intent = new Intent(getActivity(), FaceBookActivity.class);
+                      startActivityForResult(intent, 100);
+
+8)  get the all user info in Project
+
+  @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == 1 && requestCode == 100) {
+            if (data.hasExtra("Image_URL") && data.hasExtra("user_FB_email") && data.hasExtra("user_FB_id") && data.hasExtra("user_Fname") && data.hasExtra("user_Lname")) {
+                String imageurl = data.getExtras().getString("Image_URL");
+                String user_FB_email = data.getExtras().getString("user_FB_email");
+                String user_FB_id = data.getExtras().getString("user_FB_id");
+                String user_Lname = data.getExtras().getString("user_Lname");
+                String user_Fname = data.getExtras().getString("user_Fname");
+
+                System.out.println("my activity result@@@@@user_FB_email@@@@@@" + user_FB_email);
+                System.out.println("my activity result@@@@@@imageurl@@@@@" + imageurl);
+                System.out.println("my activity result@@@@@user_FB_id@@@@@@" + user_FB_id);
+                System.out.println("my activity result@@user_Lname@@@@@@@@@" + user_Lname);
+                System.out.println("my activity result@@@@@user_Fname@@@@@@" + user_Fname);
+            }
+        }
+    }
+
+	
+	
+       
+
+
+                  
+					
+					 	
+					

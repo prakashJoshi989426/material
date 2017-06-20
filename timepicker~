@@ -1,0 +1,45 @@
+ public static void selectTime(final TextView textView, final Context context, String time) throws ParseException {
+        Date date = null;
+        Calendar mcurrentTime = Calendar.getInstance();
+        if (time != null && !time.equals("")) {
+            SimpleDateFormat sdf = new SimpleDateFormat("hh:mm a");
+            date = sdf.parse(time);
+        } else {
+            SimpleDateFormat sdf1 = new SimpleDateFormat("hh:mm a");
+            try {
+                Calendar calendar = Calendar.getInstance();
+                int hour = calendar.get(Calendar.HOUR_OF_DAY);
+                int min = calendar.get(Calendar.MINUTE);
+                String format = "";
+                if (hour == 0) {
+                    hour += 12;
+                    format = "AM";
+                } else if (hour == 12) {
+                    format = "PM";
+                } else if (hour > 12) {
+                    hour -= 12;
+                    format = "PM";
+                } else {
+                    format = "AM";
+                }
+                date = sdf1.parse(String.valueOf(new StringBuilder().append(hour).append(" : ").append(min)
+                        .append(" ").append(format)));
+            } catch (ParseException e) {
+            }
+        }
+        mcurrentTime.setTime(date);
+        int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
+        int minute = mcurrentTime.get(Calendar.MINUTE);
+        TimePickerDialog mTimePicker;
+
+        mTimePicker = new TimePickerDialog(context, new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+                //editText.setText( selectedHour + ":" + selectedMinute);
+                boolean isPM = (selectedHour >= 12);
+                textView.setText(String.format("%02d:%02d %s", (selectedHour == 12 || selectedHour == 0) ? 12 : selectedHour % 12, selectedMinute, isPM ? "PM" : "AM"));
+            }
+        }, hour, minute, false);//Yes 24 hour time
+        mTimePicker.setTitle("Select Time");
+        mTimePicker.show();
+    }

@@ -1,0 +1,25 @@
+Get the time string from long timestamp
+
+ long initial_time = Integer.parseInt(arrData_adapter.get(position).get(
+                        Constant_notification_list.added));
+
+                long time_new = System.currentTimeMillis() / 1000;
+               
+                
+                
+                String result = " " + DateUtils.getRelativeTimeSpanString(initial_time, time_new, 0);
+
+ holder.txt_time.setText(CommonMethod.getTimeAgoFromMilliSecond(Long.parseLong(averageRatingDetailResponse.getCreated_at()) * 1000));
+ public static String getTimeAgoFromMilliSecond(long milliSecondToConvert) {
+        String timePassedString = "";
+        try {
+            timePassedString = getRelativeTimeSpanString(milliSecondToConvert, System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS).toString();
+        } catch (Exception e) {
+            timePassedString = "";
+            e.printStackTrace();
+        }
+        return timePassedString;
+    }
+
+
+

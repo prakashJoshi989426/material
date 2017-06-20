@@ -1,0 +1,172 @@
+1) put the broadcast Reciver class
+ 
+public class MySmsBroadCastReceiver extends BroadcastReceiver {
+
+
+    MainActivity main = null;
+
+    public void setMainActivityHandler(MainActivity main) {
+        this.main = main;
+    }
+
+    @Override
+    public void onReceive(Context context, Intent intent) {
+
+        try {
+            String sender = "";
+            Object[] pdus1 = (Object[]) intent.getExtras().get("pdus");
+            SmsMessage shortMessage1 = SmsMessage.createFromPdu((byte[]) pdus1[0]);
+
+           /* Log.d("SMSReceiver", "SMS message sender: " +
+                    shortMessage1.getOriginatingAddress());
+            Log.d("SMSReceiver", "SMS message text: " +
+                    shortMessage1.getDisplayMessageBody());*/
+            sender = shortMessage1.getOriginatingAddress();
+            Object[] pdus2 = (Object[]) intent.getExtras().get("pdus");
+
+            StringBuilder text = new StringBuilder();
+            // get sender from first PDU
+            SmsMessage shortMessage2 = SmsMessage.createFromPdu((byte[]) pdus2[0]);
+
+            for (int i = 0; i < pdus2.length; i++) {
+                shortMessage2 = SmsMessage.createFromPdu((byte[]) pdus2[i]);
+                text.append(shortMessage2.getDisplayMessageBody());
+            }
+            // SMS message will be like :
+            //BH-NOTIBY
+            //Welcome to Notiby. You are about to verify your account. You can proceed further using  OTP code : N2O2T5I6.
+            if (text.toString().contains(":")) {
+
+                if (!sender.trim().equalsIgnoreCase("") && sender != null) {
+                    if (sender.contains("-PLVSMS")) {
+                        String otp_to_broadcast = "";
+
+                        //Methods.syso(" @@@@ Sms text @@ " + text.toString());
+                        // Methods.syso(" @@@@ Sms text at 0 @@ " + text.toString().split(":")[0].trim());
+                        // Methods.syso(" @@@@ Sms text OTP  @@  " + text.toString().split(":")[1].trim());
+
+                        otp_to_broadcast = text.toString().split(":")[1].trim();
+
+                        sendBroadcastToRefresOTP(context, otp_to_broadcast);
+                    }
+                }
+
+                //Toast.makeText(context, "  <<Sms text OTP only at 00000 >>  " + text.toString().split(":")[0].trim() + "  <<Sms text OTP only at 11111 >>  " + text.toString().split(":")[1].trim() + " sender " + shortMessage1.getOriginatingAddress(), Toast.LENGTH_LONG).show();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void sendBroadcastToRefresOTP(Context context, String otp_value) {
+
+        //verify signup
+        Intent intent = new Intent("getotp");
+        intent.putExtra("otp", otp_value);
+        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+
+
+    }
+}
+
+
+2) Declare Broadcast in your MAinActivity
+
+     MySmsBroadCastReceiver mySmsBroadCastReceiver;
+
+3) initialize broadcast in oncreate of your activity before Setcontentview
+
+        IntentFilter filter1 = new IntentFilter("android.provider.Telephony.SMS_RECEIVED");
+        mySmsBroadCastReceiver = new MySmsBroadCastReceiver();
+        mySmsBroadCastReceiver.setMainActivityHandler(this);
+        registerReceiver(mySmsBroadCastReceiver, filter1);
+
+4) unregister receiver in your activity onDestroy
+         
+          @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(mySmsBroadCastReceiver);
+    }
+
+5) register Broadcast Receiver in OTP Fragment or activity screen
+
+  LocalBroadcastManager.getInstance(getActivity()).registerReceiver(otp, new IntentFilter("getotp"));
+
+6) get the value of register
+
+   BroadcastReceiver otp = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            if (intent.getExtras().containsKey("otp")) {
+                broadcastotpcode = intent.getStringExtra("otp");
+            }
+
+            if (broadcastotpcode.contains(".")) {
+                edit_otp.setText(removeLastChar(broadcastotpcode));
+            } else {
+                edit_otp.setText(broadcastotpcode);
+            }
+
+
+        }
+    };
+
+7) on destroy register in OTP Screen
+
+  @Override
+    public void onDestroy() {
+        super.onDestroy();
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(otp);
+    }
+
+8) if using api level 23 then do below code
+
+ public boolean getPermissonCheck(final MainActivity mActivity, final String permisson, final int request_code, String msg) {
+
+        int hasReadWritePermisson = 0;
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            hasReadWritePermisson = mActivity.checkSelfPermission(permisson);
+
+            if (hasReadWritePermisson != PackageManager.PERMISSION_GRANTED) {
+
+                if (!mActivity.shouldShowRequestPermissionRationale(permisson)) {
+                    showMessageOKCancel(mActivity, msg,
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                        mActivity.requestPermissions(new String[]{permisson},
+                                                request_code);
+                                    }
+
+                                }
+                            });
+                    return false;
+                }
+                mActivity.requestPermissions(new String[]{permisson},
+                        request_code);
+                return false;
+            }
+        }
+
+        //insertDummyContact();
+        return true;
+
+    }
+
+////// call permission 
+        if (common_methods.getPermissonCheck(mActivity,
+                android.Manifest.permission.RECEIVE_SMS,
+                REQUEST_CODE_ASK_PERMISSIONS,
+                getString(R.string.you_need_to_sms))) {
+
+        }
+
+         
+
+ 

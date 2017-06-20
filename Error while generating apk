@@ -1,0 +1,14 @@
+while proguard put this below line
+
+
+
+in Proguard.pro file 
+
+   ===>  -dontwarn okio.**
+
+
+put in app gradle :===>  minifyEnabled false
+
+
+
+

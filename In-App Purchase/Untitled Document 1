@@ -1,0 +1,7 @@
+1) Put manifest permission
+
+       <uses-permission android:name="com.android.vending.BILLING" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
+
+2) 

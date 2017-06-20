@@ -1,0 +1,20 @@
+1) graldle file
+
+compile 'com.github.orangegangsters:swipy:1.2.3@aar'
+
+2) in Recycleview xml
+
+ <com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout
+        android:id="@+id/swipyrefreshlayout"
+        app:srl_direction="top"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_listing"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout>
+
+3) Declare swiperefreshlayout
+ 

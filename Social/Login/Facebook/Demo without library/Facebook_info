@@ -1,0 +1,143 @@
+
+Following instruction for app add on facebook devloper console:
+
+1) Open https://developers.facebook.com/
+2) click on "Apps" tab -> Create new Aplication -> Enter Appication Name and choose your application category.
+3) Dashboard Page : App ID exits like App ID : 911831638841047 (Copy and add in string.xml like <string name="app_id">911831638841047</string> 4) Settings menu : Add click on "Add Paltform" -> select android. 
+					       -> Enter your package name on : Google Play Package Name.
+					       -> Enter your Calss name on   : Class Name.
+					       -> Key Hashes : Both is different (debug key and signature key) (Its mandatory for all app).
+					       ->Add your email id in : Contact Email.
+					       -> Click on "Save Changes" Button.
+
+5) Status & Review : Do you want to make this app and all its live features available to the general public? : Yes for publish your app.  
+
+6) Download latest android facebook SDk from these link : https://developers.facebook.com/docs/android
+
+Following instruction for how can you work with code:
+
+1) first put the Gradle in to your dependecy
+                   compile 'com.facebook.android:facebook-android-sdk:4.1.0'
+2) put the repositioory
+                   repositories {
+                        mavenCentral()
+                      }
+
+3)in Login class
+     1) Initialize
+             LoginManager loginManager;
+             CallbackManager callbackManager;  
+     2) call this method into initialize
+         private void facebbokinitialize()
+         {
+          FacebookSdk.sdkInitialize(mActivity);
+          callbackManager = CallbackManager.Factory.create();
+           }   
+    3) in Onclick
+           loginManager = LoginManager.getInstance();
+            loginManager.registerCallback(callbackManager,
+                    new FacebookCallback<LoginResult>() {
+
+                        @Override
+                        public void onSuccess(final LoginResult loginResult) {
+                            // App code
+
+                            System.out.println("LR ------------ " + loginResult);
+
+                            GraphRequest request = GraphRequest.newMeRequest(loginResult.getAccessToken(),
+                                    new GraphRequest.GraphJSONObjectCallback() {
+
+                                        @Override
+                                        public void onCompleted(JSONObject jsonObject, GraphResponse graphResponse) {
+
+
+                                            Methods.syso("JO >>>>>>>>> " + jsonObject);
+                                            Methods.syso("GR +++++++++ " + graphResponse);
+
+
+                                            if (jsonObject != null) {
+
+                                                /*try {
+
+                                                    user_FB_id = jsonObject.getString("id");
+                                                    user_FB_email = jsonObject.getString("email");
+
+                                                    if (user_FB_email != null && !user_FB_email.isEmpty()) {
+                                                        CheckResponse.callSignInApi(mActivity, user_FB_email,null, WebApi.TYPE_FACEBBOK, user_FB_id);
+                                                    }
+                                                    else {
+                                                        System.out.println("===========ERROR============");
+                                                    }
+
+                                                } catch (JSONException e) {
+                                                    e.printStackTrace();
+                                                }*/
+
+                                            } else {
+                                                Methods.syso("facebook else");
+                                            }
+                                            // Application code
+                                            Log.v("LoginActivity", graphResponse.toString());
+                                        }
+                                    });
+
+                            Bundle parameters = new Bundle();
+                            parameters.putString("fields", "id, email");
+                            request.setParameters(parameters);
+                            request.executeAsync();
+                        }
+
+                        @Override
+                        public void onCancel() {
+                            // App code
+                        }
+
+                        @Override
+                        public void onError(FacebookException exception) {
+                            // App code
+                        }
+                    });
+                        
+    List<String> permissionNeeds = Arrays.asList("public_profile", "email"); // permission:---> "user_likes","user_status", "email", "user_birthday"
+            loginManager.logInWithReadPermissions(LoginFragment.this, permissionNeeds);                 
+
+4) Configure your AndroidManifest.xml :
+	
+	Add internet permission:
+
+	<uses-permission android:name="android.permission.INTERNET" />
+
+	Add folloing code in  <application> tag: 
+
+	   <provider
+            android:authorities="com.facebook.app.FacebookContentProvider1234"
+            android:name="com.facebook.FacebookContentProvider"
+            android:exported="true" />
+
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/app_id" />
+
+        <activity
+            android:name="com.facebook.FacebookActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:label="@string/app_name" />
+
+
+
+
+
+	
+
+
+
+	
+	
+       
+
+
+                  
+					
+					 	
+					

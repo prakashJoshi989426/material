@@ -1,0 +1,23 @@
+1) first make Release keystroke 
+
+
+2) Go to the keystroke path in Terminal
+           ==> cd Apk/
+           ==> cd Facebook/
+
+3)just run below command 
+     syntax : keytool -exportcert -alias <alias of your keystroke> -keystore <path of keystroke> | openssl sha1 -binary | openssl base64
+
+    example :1)
+              keytool -exportcert -alias facebook -keystore /home/mind/APK/facebook/facebook.jks | openssl sha1 -binary | openssl base64
+
+             2)
+               keytool -exportcert -alias Bhojdeals -keystore /home/kundan/APK/BhojDealsApkNew/Bhojdeals.jks | openssl sha1 -binary | openssl base64
+
+4)give the keystroke password: 
+
+and key is generated put into developer console=> save changes
+
+
+again make new apk
+

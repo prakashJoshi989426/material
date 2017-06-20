@@ -1,0 +1,135 @@
+1) create the application on twitter developer
+   1)   https://apps.twitter.com ---> click on Manageyour app at bottom app link
+   2)   click on button create new app and fill the below information
+             1) App name: xyz(name of your application)
+             2) App description: description of your app
+             3) websit url: https://www.google.co.in
+             4) callback url: https://api.twitter.com/oauth/authorize?force_login=true
+        click on agreement and app will be created
+   3)  Give the permission from the permission tab "Read,write and access messages"
+   4)  from the key and access token tab click on cope into string file
+   5)  install fabric plugin in Android studio 
+                     a) click on File menu --> plugin --> CLick on browse Repository --> in browse repository search for Fabric
+                         and Click on install -- restart android Studio
+                     b) on Top Click on Plugin icon in android studio
+                     c) Now Login with your account 
+                     d) Click on Twitter - and installed plugin
+                     e) after complete install COme Back and Click on installed
+                     f) Login with api key and secret and automatically Rebuild project       
+   6)  Enter the user email: flightapptest@gmail.com  , password: flight123
+   7)  after that select twitter secon option ==> select login click on next until finish
+      automaticaly code and dependency added into your project
+
+
+2) Build the gradle and clean your project
+
+3) after that put this class Loginwithtwottter into your project
+     public class LoginWithTwitter extends BaseFragment {
+
+    // Note: Your consumer key and secret should be obfuscated in your source code before shipping.
+    private static final String TWITTER_KEY = "9c3PdMtcVCeS1fANNAkgiaPbA";
+    private static final String TWITTER_SECRET = "i2SuxtjDEPBuBJx6L8Y68y4tkFCsGLeInu3s1bStiSzCzRC7o7";
+    String twitterId, email;
+
+
+    TwitterLoginButton twitterLoginButton;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        TwitterAuthConfig authConfig = new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
+        Fabric.with(mActivity, new Twitter(authConfig));
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        // return super.onCreateView(inflater, container, savedInstanceState);
+        rootView = inflater.inflate(R.layout.social_twitter_login, container, false);
+        initcomponents();
+        twitterLoginButton.setVisibility(View.GONE);
+        twitterLoginButton.setCallback(new Callback<TwitterSession>() {
+            @Override
+            public void success(Result<TwitterSession> result) {
+                // Do something with result, which provides a
+                // TwitterSession for making API calls
+                Methods.syso("userName : " + result.data.getUserName());
+
+                Toast.makeText(getActivity(),""+result.data.getUserName(),Toast.LENGTH_SHORT).show();
+                //TwitterSignupRequest("" + result.data.getUserId(), "twitter", result.data.getUserName(), "", "");
+            }
+
+            @Override
+            public void failure(TwitterException exception) {
+                // Do something on failure
+                Toast.makeText(getActivity(), "1" + exception.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        return rootView;
+    }
+
+
+    private void initcomponents()
+    {
+        twitterLoginButton=(TwitterLoginButton)rootView.findViewById(R.id.login_button);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        twitterLoginButton.performClick();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        // Pass the activity result to the login button.
+        twitterLoginButton.onActivityResult(requestCode, resultCode,
+                data);
+    }
+}
+
+4) put the xml  social_twitter_login
+    
+      <?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.twitter.sdk.android.core.identity.TwitterLoginButton
+        android:id="@+id/login_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>
+
+5) in MAin Activity put the code in Activity Result
+       
+         Fragment fragment = getFragmentManager()
+                .findFragmentById(android.R.id.content);
+        if (fragment != null) {
+            fragment.onActivityResult(requestCode, resultCode, data);
+        }
+
+5)in LoginFragment
+         1) initialization of twitter call below method into oncreateview before initcomponents()
+           private void facebbokinitialize() {
+        FacebookSdk.sdkInitialize(mActivity);
+        callbackManager = CallbackManager.Factory.create();
+          }
+
+6) onclick of twitter
+                LoginWithTwitter loginWithTwitter = new LoginWithTwitter();
+            mActivity.getSupportFragmentManager().beginTransaction()
+                    .add(android.R.id.content, loginWithTwitter).commit();
+   
+   
+ LoginWithTwitter loginWithTwitter = new LoginWithTwitter();
+            mActivity.getSupportFragmentManager().beginTransaction()
+                    .add(android.R.id.content, loginWithTwitter).commit();
+
+          
+      
+  
+

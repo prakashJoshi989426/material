@@ -1,0 +1,62 @@
+1) create the application on twitter developer
+   1)   https://apps.twitter.com ---> click on Manageyour app at bottom app link
+   2)   click on button create new app and fill the below information
+             1) App name: xyz(name of your application)
+             2) App description: description of your app
+             3) websit url: https://www.google.co.in
+             4) callback url: https://api.twitter.com/oauth/authorize?force_login=true
+        click on agreement and app will be created
+   3)  Give the permission from the permission tab "Read,write and access messages"
+   4)  from the key and access token tab click on cope into string file
+   5)  install fabric plugin in Android studio 
+                     a) click on File menu --> plugin --> CLick on browse Repository --> in browse repository search for Fabric
+                         and Click on install -- restart android Studio
+                     b) on Top Click on Plugin icon in android studio
+                     c) Now Login with your account 
+                     d) Click on Twitter - and installed plugin
+                     e) after complete install COme Back and Click on installed
+                     f) Login with api key and secret and automatically Rebuild project       
+   6)  Enter the user email: flightapptest@gmail.com  , password: flight123
+   7)  after that select twitter secon option ==> select login click on next until finish
+      automaticaly code and dependency added into your project
+
+
+2) just call following code in app gradle file
+
+repositories {
+    maven { url 'https://maven.fabric.io/public' }
+}
+
+
+just add in your project Build the gradle and clean your project
+
+3) Do on twitter click 
+int TWITTER = 200;
+  Intent intent = new Intent(getActivity(), TwitterLoginActivity.class);
+                        startActivityForResult(intent, TWITTER);
+
+4) get all user info in ActvityResult
+
+  @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+   if (resultCode == 1 && requestCode == TWITTER) {
+            String image_url = "", twit_id = "", twit_user_name = "";
+            if (data.hasExtra("Twit_Image_URL")) {
+                image_url = data.getExtras().getString("Twit_Image_URL");
+            }
+            if (data.hasExtra("twit_id")) {
+                twit_id = data.getExtras().getString("twit_id");
+            }
+            if (data.hasExtra("twit_user_name")) {
+                twit_user_name = data.getExtras().getString("twit_user_name");
+            }
+            System.out.println("id onmy activit yresult=====>" + twit_id);
+            System.out.println("name onmy activit yresult=====>" + twit_user_name);
+            System.out.println("image url onmy activit yresult=====>" + image_url);
+        } else {
+
+        }
+    }
+
+

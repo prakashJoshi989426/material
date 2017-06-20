@@ -1,0 +1,230 @@
+1) make the app on developer console
+         1) login with email account
+         2) open developer console
+         3) click on create project-->give the name of project
+         4) click on API tab --> Enable permission from developer console only one Google + Api
+         5) click on creditianls tab  ==>oauth Client id ==> fill project info ==> Android  select radio button installed application and pass the sha1 key and package name
+         5) for generation server key ==>create new key ===>Server key and ok
+
+2) compile 'com.google.android.gms:play-services:6.5.87'
+
+3) Manifest
+     1) manifest permission
+                <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+                <uses-permission android:name="android.permission.USE_CREDENTIALS" />    
+                <uses-permission android:name="android.permission.INTERNET" />
+      2) write the metadata  ==> change the value of server key
+                   <meta-data
+            android:name="com.google.android.maps.v2.API_KEY"
+            android:value="AIzaSyAqQkc7TG7YswMArcoIY70Ow2f2RtPh3ls" />
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
+4) write the code in MainActivity declaration
+    
+    1) Declaration 
+    private static final String TAG = "GooglePlus";
+    private static final int RC_SIGN_IN = 0;
+    private static final int DIALOG_PLAY_SERVICES_ERROR = 0;
+    private static final String SAVED_PROGRESS = "sign_in_progress";
+    private GoogleApiClient mGoogleApiClient;
+    private static final int STATE_DEFAULT = 0;
+    private static final int STATE_SIGN_IN = 1;
+    private static final int STATE_IN_PROGRESS = 2;
+    private int mSignInProgress;
+    private PendingIntent mSignInIntent;
+    private int mSignInError;
+    private SignInButton mSignInButton;     
+    
+    2) initialization
+        call this method into oncreate after setcontentview(R.layout.activity_main)
+           private void gpluslogininitialize(Bundle savedInstanceState) {
+        try {
+            mSignInButton = (SignInButton) findViewById(R.id.sign_in_button);
+            mSignInButton.setOnClickListener(this);
+
+            if (savedInstanceState != null) {
+                mSignInProgress = savedInstanceState.getInt(SAVED_PROGRESS,
+                        STATE_DEFAULT);
+            }
+            mGoogleApiClient = buildGoogleApiClient();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+   3)  implement interface ==>  implements 
+        ConnectionCallbacks, OnConnectionFailedListener,View.OnClickListener
+   4) write below code in mainActivity
+         private GoogleApiClient buildGoogleApiClient() {
+        return new GoogleApiClient.Builder(this).addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(Plus.API, Plus.PlusOptions.builder().build())
+                .addScope(Plus.SCOPE_PLUS_PROFILE)
+                .addScope(Plus.SCOPE_PLUS_LOGIN).build();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mGoogleApiClient.connect();
+
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+
+        if (mGoogleApiClient.isConnected()) {
+            mGoogleApiClient.disconnect();
+        }
+    }
+
+    @Override
+    public void onConnected(Bundle connectionHint) {
+        Log.i(TAG, "onConnected");
+        try {
+            mSignInButton.setEnabled(false);
+
+            // Retrieve some profile information to personalize our app for the user.
+            Person currentUser = Plus.PeopleApi.getCurrentPerson(mGoogleApiClient);
+            String id = currentUser.getId();
+            String personName = currentUser.getDisplayName();
+            Image personPhoto = currentUser.getImage();
+            String email = Plus.AccountApi.getAccountName(mGoogleApiClient);
+            String personGooglePlusProfile = currentUser.getUrl();
+
+            //System.out.println("id=" + id + "name==" + currentUser.getDisplayName());
+
+            if (id.equalsIgnoreCase("") || id == null) {
+
+            } else {
+                // send broadcast
+                Intent intent = new Intent("Googleplus");
+                intent.putExtra("email", email);
+                intent.putExtra("name", personName);
+                sendBroadcast(intent);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        mSignInProgress = STATE_DEFAULT;
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult result) {
+
+        Log.i(TAG, "onConnectionFailed: ConnectionResult.getErrorCode() = " + result.getErrorCode());
+
+        if (result.getErrorCode() == ConnectionResult.API_UNAVAILABLE) {
+
+        } else if (mSignInProgress != STATE_IN_PROGRESS) {
+            mSignInIntent = result.getResolution();
+            mSignInError = result.getErrorCode();
+
+            if (mSignInProgress == STATE_SIGN_IN) {
+                resolveSignInError();
+            }
+        }
+        onSignedOut();
+    }
+
+    public void resolveSignInError() {
+        try {
+            if (mSignInIntent != null) {
+                try {
+                    mSignInProgress = STATE_IN_PROGRESS;
+                    startIntentSenderForResult(mSignInIntent.getIntentSender(), RC_SIGN_IN, null, 0, 0, 0);
+                } catch (IntentSender.SendIntentException e) {
+                    Log.i(TAG, "Sign in intent could not be sent: " + e.getLocalizedMessage());
+                    mSignInProgress = STATE_SIGN_IN;
+                    mGoogleApiClient.connect();
+                }
+            } else {
+
+                if (mGoogleApiClient.isConnected()) {
+                    mGoogleApiClient.disconnect();
+                }
+                onSignedOut();
+
+                makeDialog(DIALOG_PLAY_SERVICES_ERROR);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void onSignedOut() {
+        mSignInButton.setEnabled(true);
+    }
+
+    @Override
+    public void onConnectionSuspended(int cause) {
+        mGoogleApiClient.connect();
+    }
+
+    public void makeDialog(int id) {
+        switch (id) {
+            case DIALOG_PLAY_SERVICES_ERROR:
+
+                if (mSignInProgress == STATE_SIGN_IN) {
+                    resolveSignInError();
+                }
+
+
+            default:
+                return;
+        }
+    }
+
+    // .............gooogle-plus............................
+    @Override
+    public void onSaveInstanceState(Bundle savedState) {
+        super.onSaveInstanceState(savedState);
+        savedState.putInt(SAVED_PROGRESS, mSignInProgress);
+    }
+   5) write below code in onActivityResult
+       switch (requestCode) {
+            case RC_SIGN_IN:
+                if (resultCode == RESULT_OK) {
+                    mSignInProgress = STATE_SIGN_IN;
+                } else {
+                    mSignInProgress = STATE_DEFAULT;
+                }
+
+                if (!mGoogleApiClient.isConnecting()) {
+                    mGoogleApiClient.connect();
+                }
+                break;
+        }       
+6)In Login Fragment
+     1) register broadcast
+          getActivity().registerReceiver(Googleplus, new IntentFilter("Googleplus"));
+     2) implement broadcast
+           BroadcastReceiver Googleplus = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            try {
+              String  Gemail = intent.getExtras().getString("email");
+               String GName = intent.getExtras().getString("name");
+
+                Toast.makeText(getActivity(),"Email-==>"+Gemail,Toast.LENGTH_SHORT).show();
+                System.out.println("googleemail="+Gemail+"==name="+GName);
+
+                // SignUp_Google_Api();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    };
+   3) write on click 
+try {
+                mActivity.resolveSignInError();
+                //System.out.println("googleplus-call");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+       

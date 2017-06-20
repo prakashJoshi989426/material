@@ -1,0 +1,65 @@
+ public class DownloadImage extends AsyncTask<String, Void, String> {
+        String image_url = "";
+
+        public DownloadImage(String image_url) {
+            this.image_url = image_url;
+        }
+
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+
+        }
+
+        @Override
+        protected String doInBackground(String... URL) {
+
+            download_img(image_url);
+
+            return "";
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+
+        }
+    }
+
+    public void download_img(String imageurl) {
+        // String imageurl = "YOUR URL";
+        try {
+            Bitmap bmpimg = null;
+            InputStream in = null;
+
+            try {
+                Log.i("URL", imageurl);
+                URL url = new URL(imageurl);
+                URLConnection urlConn = url.openConnection();
+
+                HttpURLConnection httpConn = (HttpURLConnection) urlConn;
+
+                httpConn.connect();
+
+                in = httpConn.getInputStream();
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            bmpimg = BitmapFactory.decodeStream(getConnection(imageurl));
+
+            if (bmpimg == null) {
+                System.out.println("Your image is null>>>>>>>");
+            }
+
+
+            Create_Save_Bitmap(bmpimg, "PUPO_user", "profile_img" + "" + ".png");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        }
+    }

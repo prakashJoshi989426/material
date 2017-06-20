@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Social Module</string>
+
+
+    <string name="app_id">1531252247178865</string>
+
+    <string name="twitter_app_key">bp5e1rKes1Fi6p2RZpYqRca7Y</string>
+    <string name="twitter_app_secret">z2Yv8KclHjVUjRCfh2e9WeQZSmenYV4ap1o0ygiaT4gjW8zTYj</string>
+</resources>

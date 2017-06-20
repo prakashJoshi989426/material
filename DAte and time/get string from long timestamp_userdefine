@@ -1,0 +1,85 @@
+public String calculateTime(long miliseconds) {
+
+		miliseconds = System.currentTimeMillis() - miliseconds;
+		int day = (int) TimeUnit.MILLISECONDS.toDays(miliseconds);
+		int hours = (int) (TimeUnit.MILLISECONDS.toHours(miliseconds) - TimeUnit.DAYS
+				.toHours(day));
+		int minute = (int) (TimeUnit.MILLISECONDS.toMinutes(miliseconds)
+				- TimeUnit.DAYS.toMinutes(day) - TimeUnit.HOURS
+				.toMinutes(hours));
+		int second = (int) (TimeUnit.MILLISECONDS.toSeconds(miliseconds)
+				- TimeUnit.DAYS.toSeconds(day)
+				- TimeUnit.HOURS.toSeconds(hours) - TimeUnit.MINUTES
+				.toSeconds(minute));
+
+		String finalString = "", days = " Days ", hour = " Hours ", minutes = " Minutes ", seconds = " Seconds ";
+
+		if (day >= 0) {
+			if (day == 0) {
+				days = "";
+			} else if (day == 1) {
+				days = day + " day ";
+			} else {
+				days = day + " days ";
+			}
+			finalString = days;
+		}
+
+        if(day > 0) {
+
+        }else {
+
+
+            if (hours >= 0) {
+                if (hours == 0) {
+                    hour = "";
+                } else if (hours == 1) {
+                    hour = hours + " hour ";
+                } else {
+                    hour = hours + " hours ";
+                }
+                finalString = finalString + " " + hour;
+            }
+
+            if(hours > 0) {
+
+            }else {
+
+                if (minute >= 0) {
+                    if (minute == 0) {
+                        minutes = "";
+                    } else if (minute == 1) {
+                        minutes = minute + " min ";
+                    } else {
+                        minutes = minute + " mins ";
+                    }
+                    finalString = finalString + " " + minutes;
+                }
+
+                if(minute > 0) {
+
+                }else {
+
+                    if (second >= 0) {
+                        if (second == 0) {
+                            seconds = "0"+ " sec ";
+                        } else if (second == 1) {
+                            seconds = second + " sec ";
+                        } else {
+                            seconds = second + " secs ";
+                        }
+                        finalString = finalString + " " + seconds;
+                    } else {
+                        finalString = 1 + " " + " sec ";
+                    }
+
+                }
+
+            }
+
+        }
+
+		finalString = finalString.replaceAll("  ", " ");
+
+		return finalString;
+	}

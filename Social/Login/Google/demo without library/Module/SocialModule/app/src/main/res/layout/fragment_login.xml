@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:orientation="vertical">
+
+
+    <RelativeLayout
+        android:id="@+id/rl_facebook"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/facebook_rounded_button"
+        android:gravity="center_horizontal">
+
+        <ImageView
+            android:id="@+id/image_face"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="5dp"
+            android:src="@drawable/f" />
+
+        <Button
+            android:id="@+id/btn_facebook"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/image_face"
+            android:background="@drawable/facebook_rounded_button"
+            android:padding="5dp"
+            android:text="Login with Facebook"
+            android:textColor="@android:color/white" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_twit_gplus"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rl_facebook"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="15dp"
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+        <!--     <Button
+                      android:id="@+id/btn_gplus"
+                      android:layout_width="wrap_content"
+                      android:text="Google+"
+                      android:layout_centerVertical="true"
+                      android:drawableLeft="@drawable/google"
+                      android:layout_weight="1"
+                      android:background="@drawable/gplus_rounded_button"
+                      android:layout_marginRight="7.5dp"
+                      android:paddingLeft="0dp"
+                      android:paddingRight="@dimen/dimen_padding_login"
+                      android:gravity="center"
+                      android:layout_height="wrap_content" />-->
+
+        <RelativeLayout
+            android:id="@+id/rl_gplus"
+
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="7.5dp"
+            android:layout_weight="1"
+            android:background="@drawable/gplus_rounded_button"
+            android:gravity="center"
+            android:paddingLeft="0dp"
+            android:paddingRight="5dp">
+
+            <ImageView
+                android:id="@+id/img_gplus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="5dp"
+                android:src="@drawable/google" />
+
+            <Button
+                android:id="@+id/btn_gplus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@id/img_gplus"
+                android:background="#EB423B"
+                android:padding="5dp"
+                android:text="Google+"
+                android:textColor="@android:color/white" />
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/rl_twitter"
+
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="7.5dp"
+            android:layout_weight="1"
+            android:background="@drawable/twitter_rounded_button"
+            android:gravity="center"
+            android:paddingLeft="0dp"
+            android:paddingRight="5dp">
+
+            <ImageView
+                android:id="@+id/img_twitter"
+                android:layout_width="25dp"
+                android:layout_height="20dp"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="5dp"
+                android:src="@drawable/twitter" />
+
+            <Button
+                android:id="@+id/btn_twitter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@id/img_twitter"
+                android:background="#36A9D6"
+                android:padding="5dp"
+                android:text="Twitter"
+                android:textColor="@android:color/white" />
+        </RelativeLayout>
+
+    </LinearLayout>
+
+
+</RelativeLayout>

@@ -1,0 +1,6 @@
+1) declare offset limit variable
+ int offset = 0;
+ int limit = 10;
+
+2) 
+

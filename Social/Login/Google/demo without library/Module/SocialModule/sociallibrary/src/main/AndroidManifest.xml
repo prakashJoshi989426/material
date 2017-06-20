@@ -1,0 +1,42 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="social.com.sociallibrary">
+
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <application
+        android:allowBackup="true"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+      >
+
+
+        <activity android:name=".Social.FaceBookLoginActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen">
+
+        </activity>
+
+        <activity android:name=".Social.TwitterLoginActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen">
+
+        </activity>
+
+
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/app_id" />
+
+        <activity
+            android:name="com.facebook.FacebookActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.NoDisplay" />
+
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="3833a836ff3a09ebe5094cdcacc61da68078c0eb" />
+
+    </application>
+
+</manifest>
